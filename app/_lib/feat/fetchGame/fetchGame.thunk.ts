@@ -1,9 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { FetchGameParams } from './fetchGame.types';
+import { ApiResponse, Match } from '../../types';
 
 
 export const fetchGame = createAsyncThunk<
-  string,
+  Match,
   FetchGameParams
 >('card/fetchGame', async ({ matchingPairId }, { getState, requestId, rejectWithValue}) => {
 
@@ -16,9 +17,9 @@ export const fetchGame = createAsyncThunk<
       throw new Error('Failed to start game')
     }
 
-    const data = await response.json();
-    console.log("response is ok")
-    return data;
+    const data = (await response.json()) as ApiResponse<Match>
+
+    return data.data;
   } catch (error) {
     return rejectWithValue('Could not start game');
   } 
