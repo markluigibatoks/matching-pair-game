@@ -19,7 +19,7 @@ export const startGame = createAsyncThunk<
     }
 
     const data = await response.json();
-    console.log("response is ok")
+
     return data;
   } catch (error) {
     return rejectWithValue('Could not start game');
