@@ -2,7 +2,7 @@
 
 import Deck from "@/app/_components/deck"
 import { fetchGame } from "@/app/_lib/feat/fetchGame/fetchGame.thunk"
-import { useAppDispatch } from "@/app/_lib/hooks"
+import { useAppDispatch, useAppSelector } from "@/app/_lib/hooks"
 import { use, useEffect } from "react"
 
 export default function Page({
@@ -13,18 +13,22 @@ export default function Page({
 
   const {matchId} = use(params)
 
+  const fetchGameState = useAppSelector((state) => state.fetchGameSlice)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(fetchGame({ matchingPairId: matchId }))
   }, [dispatch, matchId])
 
+  if(!fetchGameState.match) {
+    return <p>Loading match...</p>
+  }
+
   return (
     <div>
       <h1>Game ID</h1>
       <p className="text-white">{matchId}</p>
-
-      <Deck />
+      <Deck cards={fetchGameState.match?.cards}/>
     </div>
   )
 }
