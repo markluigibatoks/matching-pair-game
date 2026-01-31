@@ -12,6 +12,17 @@ export type Match = {
   cards: Card[]
 }
 
+export type GameHistory = {
+    cardId: number
+    matchingPairId: number
+    updatedAt: Date
+    createdAt: Date
+    id: number
+    isMatched: boolean
+    matchedWith: number | null
+    card: Card
+}
+
 export type Card = {
   id: number
   position: number
@@ -19,7 +30,7 @@ export type Card = {
   cardTemplateId: number
   createdAt: string
   updatedAt: string
-  card_template: CardTemplate
+  cardTemplate: CardTemplate
 }
 
 export type CardTemplate = {
