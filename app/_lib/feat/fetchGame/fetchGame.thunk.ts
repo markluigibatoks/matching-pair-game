@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { FetchGameParams } from './fetchGame.types';
 import { ApiResponse, Match } from '../../types';
+import camelcaseKeys from 'camelcase-keys';
 
 
 export const fetchGame = createAsyncThunk<
@@ -19,7 +20,7 @@ export const fetchGame = createAsyncThunk<
 
     const data = (await response.json()) as ApiResponse<Match>
 
-    return data.data;
+    return camelcaseKeys<Match>(data.data, { deep: true });
   } catch (error) {
     return rejectWithValue('Could not start game');
   } 
