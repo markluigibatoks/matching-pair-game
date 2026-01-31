@@ -20,24 +20,18 @@ const fetchGameHistorySlice = createSlice({
   extraReducers: (builder) => {
     builder
     .addCase(fetchGameHistory.pending, (state, action) => {
-      console.log('pending')
     })
     .addCase(fetchGameHistory.fulfilled, (state, action) => {
       state.gameHistory = action.payload
-      state.status = 'fulfilled'
     })
     .addCase(fetchGameHistory.rejected, (state, action) => {
-      console.log('rejected')
     })
     .addCase(flipCard.pending, (state, action) => {
-      console.log('pending')
     })
     .addCase(flipCard.fulfilled, (state, action) => {
       state.gameHistory = action.payload
-      state.status = 'fulfilled'
     })
     .addCase(flipCard.rejected, (state, action) => {
-      console.log('rejected')
     })
   }
 })

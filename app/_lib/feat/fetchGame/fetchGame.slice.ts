@@ -22,14 +22,11 @@ const fetchGameSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchGame.pending, (state, action) => {
-        console.log('pending')
       })
       .addCase(fetchGame.fulfilled, (state, action) => {
         state.match = action.payload
-        console.log('fulfilled')
       })
       .addCase(fetchGame.rejected, (state, action) => {
-        console.log('rejected')
       })
   },
 })

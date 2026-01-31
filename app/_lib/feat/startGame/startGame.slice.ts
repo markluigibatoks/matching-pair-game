@@ -24,13 +24,10 @@ const startGameSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(startGame.pending, (state, action) => {
-        console.log('pending')
       })
       .addCase(startGame.fulfilled, (state, action) => {
-        console.log('fulfilled')
       })
       .addCase(startGame.rejected, (state, action) => {
-        console.log('rejected')
       })
   },
 })
