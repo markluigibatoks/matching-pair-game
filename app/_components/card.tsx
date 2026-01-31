@@ -1,13 +1,20 @@
 export default function Card ({
   value = "",
-  isFlipped = false
+  isFlipped = false,
+  isMatched = false,
+  onClick,
+  onTransitionEnd
 }: {
   value: string,
   isFlipped: boolean
+  isMatched: boolean
+  onClick?: () => void
+  onTransitionEnd?: () => void
 }) {
+
   return (
-    <div className={`${isFlipped ? 'cursor-pointer' : ''} relative perspective-normal w-16 aspect-square select-none`}>
-      <div className={`${isFlipped ? "rotate-y-180" : ""} absolute w-full h-full shadow rounded border-2 border-white transition duration-1000 transform-3d`}>
+    <div onClick={onClick} onTransitionEnd={onTransitionEnd} className={`${isMatched || isFlipped ? 'pointer-events-none cursor-not-allowed' : 'cursor-pointer'} relative perspective-normal w-16 aspect-square select-none`}>
+      <div className={`${isMatched || isFlipped ? "rotate-y-180" : ""} absolute w-full h-full shadow rounded border-2 border-white transition duration-1000 transform-3d`}>
         {/* Front */}
         <div className="absolute w-full h-full bg-white text-red-700 text-center text-4xl rounded-lg backface-hidden flex justify-center items-center">
           ?
