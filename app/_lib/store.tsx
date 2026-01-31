@@ -2,13 +2,13 @@ import { configureStore } from '@reduxjs/toolkit'
 
 //reducer
 import startGameSliceReducer from './feat/startGame/startGame.slice'
-import flipCardSliceReducer from './feat/flipCard/flipCard.slice'
+import fetchGameHistoryReducer from './feat/fetchGameHistory/fetchGameHistory.slice'
 import fetchGameReducer from './feat/fetchGame/fetchGame.slice'
 
 export const makeStore = configureStore({
   reducer: {
     startGameSlice: startGameSliceReducer,
-    flipCardSlice: flipCardSliceReducer,
+    fetchGameHistory: fetchGameHistoryReducer,
     fetchGameSlice: fetchGameReducer,
   },
 });
