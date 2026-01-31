@@ -13,6 +13,7 @@ import { fetchGameHistoryActions } from "../_lib/feat/fetchGameHistory/fetchGame
 export default function Deck ({ cards }: {cards?: CardType[]}) {
 
   const [currentFlip, setCurrentFlip] = useState<number[]>([])
+  const isLockedRef = useRef(false)
 
   const dispatch = useAppDispatch();
   const fetchGameHistoryState = useAppSelector((state) => state.fetchGameHistory)
@@ -40,25 +41,31 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
 
   //flip the card and set a timeout to send the request to get the game history
   function handleOnFlip(card: CardType) {
+    //0. Disable the on click
+    if(isLockedRef.current) return
+    isLockedRef.current = true
     //1. flip the card on click
     setCurrentFlip(prev => {
       if(prev.includes(card.id)) {
         return prev
       }
 
-      return [...currentFlip, card.id]
+      return [...prev, card.id]
     })
     //2. dispatch thunk on transition end
   }
 
   function handleOnTransitionEnd (card: CardType, isFlipped: boolean) {
-    //guard on site refresh
-    if(isFlipped) {
-      dispatch(flipCardThunk({cardId: card.id, matchingPairId: params.matchId}))
-    }
-
     if(currentFlip.length >= 2) {
       setCurrentFlip([])
+    }
+
+    //guard on site refresh
+    if(isFlipped) {
+      dispatch(flipCardThunk({cardId: card.id, matchingPairId: params.matchId})).then(() => {
+        const areCardsFlippingBack = currentFlip.length < 1
+        isLockedRef.current = areCardsFlippingBack
+      })
     }
   }
 
