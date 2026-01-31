@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { StartGameParams } from './startGame.types';
 
-
 export const startGame = createAsyncThunk<
   string,
   StartGameParams
@@ -20,7 +19,7 @@ export const startGame = createAsyncThunk<
 
     const data = await response.json();
 
-    return data;
+    return data.data
   } catch (error) {
     return rejectWithValue('Could not start game');
   } 
