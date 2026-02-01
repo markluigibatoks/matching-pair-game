@@ -1,8 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { StartGameParams } from './startGame.types';
+import { ApiResponse, Match } from '../../types';
+import camelcaseKeys from 'camelcase-keys';
 
 export const startGame = createAsyncThunk<
-  string,
+  Match,
   StartGameParams
 >('card/startGame', async ({difficulty, name}, { getState, requestId, rejectWithValue}) => {
 
@@ -17,9 +19,9 @@ export const startGame = createAsyncThunk<
       throw new Error('Failed to start game')
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as ApiResponse<Match>;
 
-    return data.data
+    return camelcaseKeys<Match>(data.data, {deep: true})
   } catch (error) {
     return rejectWithValue('Could not start game');
   } 

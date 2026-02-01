@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../_lib/hooks"
 import { RootState } from "../_lib/store"
 import { startGameActions } from "../_lib/feat/startGame/startGame.slice"
 import { startGame as startGameThunk } from "../_lib/feat/startGame/startGame.thunk"
+import { redirect } from "next/navigation"
 
 export default function StartGame() {
 
@@ -27,6 +28,10 @@ export default function StartGame() {
     event.preventDefault()
 
     dispatch(startGameThunk({ name: startGameState.name, difficulty: startGameState.difficulty}))
+    .unwrap()
+    .then((request) => {
+      redirect(`/matches/${request.id}`)
+    })
   }
 
   return (
