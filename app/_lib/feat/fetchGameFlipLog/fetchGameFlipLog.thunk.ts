@@ -1,18 +1,16 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { FlipCardParams } from './flipCard.types';
+import { FetchGameFlipLogParams } from './fetchGameFlipLog.type';
 import { ApiResponse, Match } from '../../types';
 import camelcaseKeys from 'camelcase-keys';
 
-export const flipCard = createAsyncThunk<
+export const fetchGameFlipLog = createAsyncThunk<
   Match,
-  FlipCardParams
->('card/flipCard', async ({ cardId, matchingPairId }, { getState, requestId, rejectWithValue}) => {
+  FetchGameFlipLogParams
+>('card/fetchGameFlipLog', async ({ matchingPairId }, { getState, requestId, rejectWithValue}) => {
 
   try {
-    const response = await fetch('http://localhost:8000/api/game-flip-logs', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ card_id: cardId, matching_pair_id: matchingPairId })
+    const response = await fetch(`http://localhost:8000/api/game-flip-logs?matching_pair_id=${matchingPairId}`, {
+      method: 'GET',
     })
 
     if(!response.ok) {
@@ -20,7 +18,7 @@ export const flipCard = createAsyncThunk<
     }
 
     const data = (await response.json()) as ApiResponse<Match>;
-    
+
     return camelcaseKeys<Match>(data.data, { deep: true })
     
   } catch (error) {

@@ -20,6 +20,7 @@ export default function Page({
     dispatch(fetchGame({ matchingPairId: matchId }))
   }, [dispatch, matchId])
 
+  //This needs re-work
   if(!fetchGameState.match) {
     return <p>Loading match...</p>
   }
@@ -28,7 +29,7 @@ export default function Page({
     <div>
       <h1>Game ID</h1>
       <p className="text-white">{matchId}</p>
-      <Deck cards={fetchGameState.match?.cards}/>
+      <Deck cards={fetchGameState.cards}/>
     </div>
   )
 }

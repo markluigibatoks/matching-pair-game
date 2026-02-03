@@ -5,20 +5,20 @@ export interface ApiResponse<T> {
 export type Match = {
   id: number
   name: string
-  gameOver: number
+  gameOver: boolean
   difficulty: number
   createdAt: string
   updatedAt: string
   cards: Card[]
+  gameFlipLogs: GameFlipLog[];
 }
 
-export type GameHistory = {
+export type GameFlipLog = {
     cardId: number
     matchingPairId: number
     updatedAt: Date
     createdAt: Date
     id: number
-    isMatched: boolean
     matchedWith: number | null
     card: Card
 }
@@ -26,10 +26,11 @@ export type GameHistory = {
 export type Card = {
   id: number
   position: number
+  isMatched: boolean
   matchingPairId: number
   cardTemplateId: number
-  createdAt: string
-  updatedAt: string
+  createdAt: null
+  updatedAt: Date | null
   cardTemplate: CardTemplate
 }
 

@@ -3,12 +3,12 @@
 import Card from "./card";
 import { useAppDispatch, useAppSelector } from "../_lib/hooks";
 import { flipCard as flipCardThunk } from "../_lib/feat/flipCard/flipCard.thunk";
-import { Card as CardType, GameHistory } from "../_lib/types";
+import { Card as CardType, GameFlipLog } from "../_lib/types";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CARD_ASSETS, CardKey } from "../_lib/card-assets";
-import { fetchGameHistory as fetchGameHistoryThunk } from "../_lib/feat/fetchGameHistory/fetchGameHistoty.thunk";
+import { fetchGameFlipLog as fetchGameFlipLogThunk } from "../_lib/feat/fetchGameFlipLog/fetchGameFlipLog.thunk";
 import { useParams } from "next/navigation";
-import { fetchGameHistoryActions } from "../_lib/feat/fetchGameHistory/fetchGameHistory.slice";
+import { fetchGameFlipLogActions } from "../_lib/feat/fetchGameFlipLog/fetchGameFlipLog.slice";
 
 export default function Deck ({ cards }: {cards?: CardType[]}) {
 
@@ -16,7 +16,7 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
   const isLockedRef = useRef(false)
 
   const dispatch = useAppDispatch();
-  const fetchGameHistoryState = useAppSelector((state) => state.fetchGameHistory)
+  const fetchGameFlipLogState = useAppSelector((state) => state.fetchGameFlipLog)
 
   const params = useParams<{matchId: string}>()
 
@@ -26,12 +26,12 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
     if (hasFetchedOnce.current) return
 
     hasFetchedOnce.current = true;
-    dispatch(fetchGameHistoryThunk({ matchingPairId: params.matchId }))
+    dispatch(fetchGameFlipLogThunk({ matchingPairId: params.matchId }))
       .unwrap()
       .then((result) => {
-        dispatch(fetchGameHistoryActions.setHasInitialized(true))
+        dispatch(fetchGameFlipLogActions.setHasInitialized(true))
 
-        result.forEach((history) => {
+        result.gameFlipLogs.forEach((history) => {
           if(history.matchedWith === null) {
             setCurrentFlip([history.cardId])
           }
@@ -67,19 +67,21 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
         isLockedRef.current = areCardsFlippingBack
       })
     }
+
+    //check here if the match is over
   }
 
   const pendingMatchesMap = useMemo(() => {
-    const map = new Map<number, GameHistory>()
+    const map = new Map<number, GameFlipLog>()
 
-    fetchGameHistoryState.gameHistory.forEach((history) => {
-      if(history.isMatched) {
-        map.set(history.cardId, history)
+    fetchGameFlipLogState.gameFlipLog.forEach((flipLog) => {
+      if(flipLog.card.isMatched) {
+        map.set(flipLog.cardId, flipLog)
       }
     })
 
     return map
-  }, [fetchGameHistoryState.gameHistory])
+  }, [fetchGameFlipLogState.gameFlipLog])
 
   return (
     <div className="grid grid-cols-4 gap-4 place-items-center max-w-xs">

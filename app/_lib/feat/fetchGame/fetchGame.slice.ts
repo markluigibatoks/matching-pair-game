@@ -5,6 +5,7 @@ import { GameState } from "./fetchGame.types";
 
 const initialState: GameState = {
   match: null,
+  cards: [],
   status: 'idle'
 }
 
@@ -25,6 +26,7 @@ const fetchGameSlice = createSlice({
       })
       .addCase(fetchGame.fulfilled, (state, action) => {
         state.match = action.payload
+        state.cards = action.payload.cards
       })
       .addCase(fetchGame.rejected, (state, action) => {
       })
