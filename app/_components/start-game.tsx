@@ -5,9 +5,10 @@ import { useAppDispatch, useAppSelector } from "../_lib/hooks"
 import { RootState } from "../_lib/store"
 import { startGameActions } from "../_lib/feat/startGame/startGame.slice"
 import { startGame as startGameThunk } from "../_lib/feat/startGame/startGame.thunk"
-import { redirect } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 
 export default function StartGame() {
+  const router = useRouter()
 
   const dispatch = useAppDispatch()
   const startGameState = useAppSelector((state: RootState) => state.startGameSlice)
@@ -30,7 +31,8 @@ export default function StartGame() {
     dispatch(startGameThunk({ name: startGameState.name, difficulty: startGameState.difficulty}))
     .unwrap()
     .then((request) => {
-      redirect(`/matches/${request.id}`)
+      router.replace(`/matches/${request.id}`)
+      router.refresh()
     })
   }
 
