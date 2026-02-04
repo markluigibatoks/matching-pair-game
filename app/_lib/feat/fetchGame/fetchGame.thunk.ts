@@ -10,7 +10,7 @@ export const fetchGame = createAsyncThunk<
 >('card/fetchGame', async ({ matchingPairId }, { getState, requestId, rejectWithValue}) => {
 
   try {
-    const response = await fetch(`http://localhost:8000/api/matching-pairs/${matchingPairId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/matching-pairs/${matchingPairId}`, {
       method: 'GET',
     })
 

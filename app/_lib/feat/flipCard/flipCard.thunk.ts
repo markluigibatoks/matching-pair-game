@@ -9,7 +9,7 @@ export const flipCard = createAsyncThunk<
 >('card/flipCard', async ({ cardId, matchingPairId }, { getState, requestId, rejectWithValue}) => {
 
   try {
-    const response = await fetch('http://localhost:8000/api/game-flip-logs', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/game-flip-logs`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ card_id: cardId, matching_pair_id: matchingPairId })

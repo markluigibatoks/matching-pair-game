@@ -9,7 +9,7 @@ export const fetchGameFlipLog = createAsyncThunk<
 >('card/fetchGameFlipLog', async ({ matchingPairId }, { getState, requestId, rejectWithValue}) => {
 
   try {
-    const response = await fetch(`http://localhost:8000/api/game-flip-logs?matching_pair_id=${matchingPairId}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/game-flip-logs?matching_pair_id=${matchingPairId}`, {
       method: 'GET',
     })
 

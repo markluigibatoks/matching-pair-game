@@ -9,7 +9,7 @@ export const startGame = createAsyncThunk<
 >('card/startGame', async ({difficulty, name}, { getState, requestId, rejectWithValue}) => {
 
   try {
-    const response = await fetch('http://localhost:8000/api/matching-pairs', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/matching-pairs`, {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ difficulty, name })
