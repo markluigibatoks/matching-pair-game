@@ -7,10 +7,11 @@ import { Card as CardType, GameFlipLog } from "../_lib/types";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CARD_ASSETS, CardKey } from "../_lib/card-assets";
 import { fetchGameFlipLog as fetchGameFlipLogThunk } from "../_lib/feat/fetchGameFlipLog/fetchGameFlipLog.thunk";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { fetchGameFlipLogActions } from "../_lib/feat/fetchGameFlipLog/fetchGameFlipLog.slice";
 
 export default function Deck ({ cards }: {cards?: CardType[]}) {
+  const router = useRouter()
 
   const [currentFlip, setCurrentFlip] = useState<number[]>([])
   const isLockedRef = useRef(false)
@@ -62,13 +63,21 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
 
     //guard on site refresh
     if(isFlipped) {
-      dispatch(flipCardThunk({cardId: card.id, matchingPairId: params.matchId})).then(() => {
+      dispatch(flipCardThunk({cardId: card.id, matchingPairId: params.matchId}))
+      .unwrap()
+      .then((result) => {
         const areCardsFlippingBack = currentFlip.length < 1
         isLockedRef.current = areCardsFlippingBack
+
+        return result
+      })
+      .then((result) => {
+        if(result.gameOver) {
+          router.replace('/gameover/win')
+          router.refresh()
+        }
       })
     }
-
-    //check here if the match is over
   }
 
   const pendingMatchesMap = useMemo(() => {
