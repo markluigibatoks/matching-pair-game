@@ -1,4 +1,3 @@
-import { GameHistory } from "../../types"
 
 export type FlipCardParams = {
   cardId: number
@@ -6,6 +5,5 @@ export type FlipCardParams = {
 }
 
 export type FlipCardState = {
-  gameHistory: GameHistory[]
   status: 'idle' | 'pending' | 'fulfilled' | 'rejected'
 }
