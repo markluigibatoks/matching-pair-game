@@ -26,9 +26,7 @@ export default function Page({
   }
 
   return (
-    <div>
-      <h1>Game ID</h1>
-      <p className="text-white">{matchId}</p>
+    <div className="w-screen h-screen flex justify-center items-center">
       <Deck cards={fetchGameState.cards}/>
     </div>
   )
