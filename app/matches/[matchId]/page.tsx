@@ -34,7 +34,7 @@ export default function Page({
           <span>Difficulty: {fetchGameState.match.difficulty}</span>
         </div>
 
-        <Link href="/" className="w-full bg-white rounded px-4 py-2 text-black hover:opacity-90">New Game</Link>
+        <Link href="/" className="w-full bg-white rounded px-4 py-2 text-black hover:opacity-90 text-center">New Game</Link>
       </div>
       <Deck cards={fetchGameState.cards}/>
     </div>
