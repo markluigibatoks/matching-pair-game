@@ -93,7 +93,7 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
   }, [fetchGameFlipLogState.gameFlipLog])
 
   return (
-    <div className="grid grid-cols-4 gap-4 place-items-center max-w-xs">
+    <div className="grid grid-cols-4 gap-4 place-items-center max-w-xs max-h-70">
       {
         cards && cards.map((card) => {
 
