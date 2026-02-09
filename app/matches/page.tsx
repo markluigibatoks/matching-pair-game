@@ -1,3 +1,3 @@
 export default function Page() {
-  return <div>Game Page</div>
+  return <div>This is the session list</div>
 }
