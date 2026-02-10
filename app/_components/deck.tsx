@@ -56,25 +56,32 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
     if(isLockedRef.current) return
     isLockedRef.current = true
     //1. flip the card on click
-    setCurrentFlip(prev => {
-      if(prev.includes(card.id)) {
-        return prev
-      }
-
-      return [...prev, card.id]
-    })
     //2. dispatch thunk
     dispatch(flipCardThunk({cardId: card.id, matchingPairId: params.matchId}))
+      .unwrap()
+      .then(() => {
+        //set the flip on success
+        setCurrentFlip(prev => {
+          if(prev.includes(card.id)) {
+            return prev
+          }
+
+          return [...prev, card.id]
+        })
+      })
   }
 
-  function handleOnTransitionEnd () {
+  function handleOnTransitionEnd (isMatched: boolean) {
+    isLockedRef.current = false
+
     //empty the current flip then the cards will flip back
     if(currentFlip.length >= 2) {
       setCurrentFlip([])
-      isLockedRef.current = true
-    }
 
-    isLockedRef.current = false
+      //if the cards matched, they wont flip back and set it to false
+      //if the cards do not matched, the cards will flip back and locked is to true
+      isLockedRef.current = !isMatched
+    }
 
     if(fetchGameFlipLogState.gameOver) {
       router.replace('/gameover/win')
@@ -105,7 +112,7 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
           const cardValue =  CARD_ASSETS[card.cardTemplate.value as CardKey]   
 
           return (
-            <Card onClick={() => handleOnFlip(card)} onTransitionEnd={() => handleOnTransitionEnd()} key={card.id} value={cardValue.emoji} isFlipped={currentFlip.includes(card.id)} isMatched={isMatched} />
+            <Card onClick={() => handleOnFlip(card)} onTransitionEnd={() => handleOnTransitionEnd(isMatched)} key={card.id} value={cardValue.emoji} isFlipped={currentFlip.includes(card.id)} isMatched={isMatched} />
           )
         })
       }
