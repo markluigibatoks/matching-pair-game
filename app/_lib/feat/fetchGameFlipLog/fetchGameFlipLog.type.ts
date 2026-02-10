@@ -6,6 +6,7 @@ export type FetchGameFlipLogParams = {
 
 export type FetchGameFlipLogState = {
   gameFlipLog: GameFlipLog[]
+  gameOver: boolean
   status: 'idle' | 'pending' | 'fulfilled' | 'rejected'
   hasInitialized: boolean
 }
