@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../_lib/hooks"
 import { RootState } from "../_lib/store"
 import { startGameActions } from "../_lib/feat/startGame/startGame.slice"
 import { startGame as startGameThunk } from "../_lib/feat/startGame/startGame.thunk"
-import { redirect, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 export default function StartGame() {
   const router = useRouter()
