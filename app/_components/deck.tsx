@@ -29,7 +29,7 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
     dispatch(fetchGameFlipLogThunk({ matchingPairId: params.matchId }))
       .unwrap()
       .then((result) => {
-        if(fetchGameFlipLogState.gameOver) {
+        if(result.gameOver) {
           router.replace('/gameover/win')
           router.refresh()
         }
@@ -50,7 +50,7 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
       })
   }, [dispatch, fetchGameFlipLogState.gameOver, params.matchId, router])
 
-  //flip the card and set a timeout to send the request to get the game history
+  //flip the card and send the request to get the game history
   function handleOnFlip(card: CardType) {
     //0. Disable the on click
     if(isLockedRef.current) return
@@ -71,6 +71,7 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
     //empty the current flip then the cards will flip back
     if(currentFlip.length >= 2) {
       setCurrentFlip([])
+      isLockedRef.current = true
     }
 
     isLockedRef.current = false
