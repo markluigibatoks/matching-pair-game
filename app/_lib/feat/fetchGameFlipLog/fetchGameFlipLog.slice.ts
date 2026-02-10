@@ -16,7 +16,8 @@ const fetchGameFlipLogSlice = createSlice({
   reducers: {
     setHasInitialized: (state, action: PayloadAction<boolean>) => {
       state.hasInitialized = action.payload
-    }
+    },
+    resetState: () => initialState
   },
   extraReducers: (builder) => {
     builder

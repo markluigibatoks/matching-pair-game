@@ -84,6 +84,8 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
     }
 
     if(fetchGameFlipLogState.gameOver) {
+      dispatch(fetchGameFlipLogActions.resetState())
+      
       router.replace('/gameover/win')
       router.refresh()
     }
