@@ -26,9 +26,16 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
   useEffect(() => {
     if (hasFetchedOnce.current) return
 
-    hasFetchedOnce.current = true;
     dispatch(fetchGameFlipLogThunk({ matchingPairId: params.matchId }))
       .unwrap()
+      .then((result) => {
+        if(fetchGameFlipLogState.gameOver) {
+          router.replace('/gameover/win')
+          router.refresh()
+        }
+
+        return result
+      })
       .then((result) => {
         dispatch(fetchGameFlipLogActions.setHasInitialized(true))
 
@@ -38,7 +45,10 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
           }
         })
       })
-  }, [dispatch, params.matchId])
+      .finally(() => {
+        hasFetchedOnce.current = true;
+      })
+  }, [dispatch, fetchGameFlipLogState.gameOver, params.matchId, router])
 
   //flip the card and set a timeout to send the request to get the game history
   function handleOnFlip(card: CardType) {
@@ -53,30 +63,21 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
 
       return [...prev, card.id]
     })
-    //2. dispatch thunk on transition end
+    //2. dispatch thunk
+    dispatch(flipCardThunk({cardId: card.id, matchingPairId: params.matchId}))
   }
 
-  function handleOnTransitionEnd (card: CardType, isFlipped: boolean) {
+  function handleOnTransitionEnd () {
+    //empty the current flip then the cards will flip back
     if(currentFlip.length >= 2) {
       setCurrentFlip([])
     }
 
-    //guard on site refresh
-    if(isFlipped) {
-      dispatch(flipCardThunk({cardId: card.id, matchingPairId: params.matchId}))
-      .unwrap()
-      .then((result) => {
-        const areCardsFlippingBack = currentFlip.length < 1
-        isLockedRef.current = areCardsFlippingBack
+    isLockedRef.current = false
 
-        return result
-      })
-      .then((result) => {
-        if(result.gameOver) {
-          router.replace('/gameover/win')
-          router.refresh()
-        }
-      })
+    if(fetchGameFlipLogState.gameOver) {
+      router.replace('/gameover/win')
+      router.refresh()
     }
   }
 
@@ -103,7 +104,7 @@ export default function Deck ({ cards }: {cards?: CardType[]}) {
           const cardValue =  CARD_ASSETS[card.cardTemplate.value as CardKey]   
 
           return (
-            <Card onClick={() => handleOnFlip(card)} onTransitionEnd={() => handleOnTransitionEnd(card, currentFlip.includes(card.id))} key={card.id} value={cardValue.emoji} isFlipped={currentFlip.includes(card.id)} isMatched={isMatched} />
+            <Card onClick={() => handleOnFlip(card)} onTransitionEnd={() => handleOnTransitionEnd()} key={card.id} value={cardValue.emoji} isFlipped={currentFlip.includes(card.id)} isMatched={isMatched} />
           )
         })
       }
