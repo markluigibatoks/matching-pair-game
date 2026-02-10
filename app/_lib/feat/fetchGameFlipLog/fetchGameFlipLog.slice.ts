@@ -5,6 +5,7 @@ import { flipCard } from '../flipCard/flipCard.thunk'
 
 const initialState: FetchGameFlipLogState = {
   gameFlipLog: [],
+  gameOver: false,
   status: 'idle',
   hasInitialized: false
 }
@@ -23,6 +24,7 @@ const fetchGameFlipLogSlice = createSlice({
     })
     .addCase(fetchGameFlipLog.fulfilled, (state, action) => {
       state.gameFlipLog = action.payload.gameFlipLogs
+      state.gameOver = action.payload.gameOver
     })
     .addCase(fetchGameFlipLog.rejected, (state, action) => {
     })
@@ -30,6 +32,7 @@ const fetchGameFlipLogSlice = createSlice({
     })
     .addCase(flipCard.fulfilled, (state, action) => {
       state.gameFlipLog = action.payload.gameFlipLogs
+      state.gameOver = action.payload.gameOver
     })
     .addCase(flipCard.rejected, (state, action) => {
     })
